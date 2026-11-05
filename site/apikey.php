@@ -118,8 +118,8 @@ if (!function_exists('bsv_require_api_key')) {
 
         try {
             [$pdo, $p] = bsv_api_db($options['config'] ?? bsv_api_find_config());
-            $keys  = '`' . $p . 'clmapi_keys`';
-            $usage = '`' . $p . 'clmapi_usage`';
+            $keys  = '`' . $p . 'clm_api_keys`';
+            $usage = '`' . $p . 'clm_api_usage`';
 
             // Joomla speichert Zeiten in UTC
             $st = $pdo->prepare(
