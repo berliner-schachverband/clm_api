@@ -25,6 +25,9 @@
             <folder>src</folder>
             <folder>tmpl</folder>
         </files>
+        <files folder="site">
+          <filename>apikey.php</filename>
+        </files>
         <languages folder="language">
             <language tag="de-DE">de-DE/com_clmapi.ini</language>
             <language tag="de-DE">de-DE/com_clmapi.sys.ini</language>
