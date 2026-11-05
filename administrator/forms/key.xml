@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <fieldset name="main">
+        <field name="id" type="hidden" default="0" />
+        <field name="name" type="text" label="COM_CLMAPI_FIELD_NAME_LABEL"
+               description="COM_CLMAPI_FIELD_NAME_DESC" required="true" maxlength="100" size="40" />
+        <field name="contact" type="text" label="COM_CLMAPI_FIELD_CONTACT_LABEL"
+               description="COM_CLMAPI_FIELD_CONTACT_DESC" maxlength="255" size="40" />
+        <field name="rate_limit" type="number" label="COM_CLMAPI_FIELD_RATE_LIMIT_LABEL"
+               description="COM_CLMAPI_FIELD_RATE_LIMIT_DESC" default="60" min="1" max="100000"
+               filter="integer" required="true" />
+        <field name="expires_at" type="calendar" label="COM_CLMAPI_FIELD_EXPIRES_LABEL"
+               description="COM_CLMAPI_FIELD_EXPIRES_DESC" translateformat="true" showtime="true"
+               filter="user_utc" />
+        <field name="note" type="textarea" label="COM_CLMAPI_FIELD_NOTE_LABEL" rows="4" cols="50" />
+    </fieldset>
+</form>
