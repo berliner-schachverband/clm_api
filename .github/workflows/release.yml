@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version im Manifest prüfen
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          V=$(sed -n 's:.*<version>\(.*\)</version>.*:\1:p' clmapi.xml | head -1)
+          if [ "$V" != "$TAG" ]; then
+            echo "Version in clmapi.xml ($V) passt nicht zum Tag ($TAG)"
+            exit 1
+          fi
+
+      - name: ZIP bauen
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          mkdir dist
+          git archive --format=zip -o "dist/com_clmapi-$TAG.zip" HEAD clmapi.xml administrator site language
+
+      - name: Inhalt der ZIP prüfen
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          LIST=$(unzip -Z1 "dist/com_clmapi-$TAG.zip")
+          for f in clmapi.xml site/apikey.php administrator/sql/install.mysql.utf8.sql; do
+            echo "$LIST" | grep -qx "$f" || { echo "Fehlt in der ZIP: $f"; exit 1; }
+          done
+          echo "$LIST"
+
+      - name: Release anlegen oder ergänzen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/*.zip --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" dist/*.zip --title "$GITHUB_REF_NAME" --generate-notes
+          fi
